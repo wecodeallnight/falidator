@@ -1,15 +1,17 @@
 {
-  "name": "falidator",
-  "version": "0.0.1",
+  "name": "@codeallnight/falidator",
+  "version": "0.0.2",
   "description": "Validation helper for TypeScript",
-  "main": "init.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "typescript": "^3.5.3",
     "webpack": "^4.39.2"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm dist/* & npx tsc"
   },
   "repository": {
     "type": "git",
