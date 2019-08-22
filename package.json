@@ -1,0 +1,24 @@
+{
+  "name": "falidator",
+  "version": "0.0.1",
+  "description": "Validation helper for TypeScript",
+  "main": "init.js",
+  "dependencies": {
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djoepramono/falidator.git"
+  },
+  "author": "Djoe Pramono",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/djoepramono/falidator/issues"
+  },
+  "homepage": "https://github.com/djoepramono/falidator#readme"
+}
