@@ -1,28 +1,28 @@
-interface Error {
+interface Invalid {
   errorMessage: string;
 }
 
-export type ErrorOr<T> = Error | T;
-export type Validate<T> = (t: T) => ErrorOr<T>;
-export type Validated<T> = Error[] | T;
+export type InvalidOr<T> = Invalid | T;
+export type Validate<T> = (t: T) => InvalidOr<T>;
+export type Validated<T> = Invalid[] | T;
 type ValidateAll<T> = (fns: Validate<T>[], t: T) => Validated<T>;
 
-type IsErrorTypeGuard<T> = (errorOrT: ErrorOr<T>) => errorOrT is Error;
-export const isError: IsErrorTypeGuard<any> = (errorOrT): errorOrT is Error => {
-  return (errorOrT as Error).errorMessage !== undefined;
+type IsErrorTypeGuard<T> = (errorOrT: InvalidOr<T>) => errorOrT is Invalid;
+export const isError: IsErrorTypeGuard<any> = (errorOrT): errorOrT is Invalid => {
+  return (errorOrT as Invalid).errorMessage !== undefined;
 };
 
-type AreErrorsTypeGuard<T> = (validatedT: Validated<T>) => validatedT is Error[];
-export const AreErrors: AreErrorsTypeGuard<any> = (validatedT): validatedT is Error[] => {
-  return (validatedT as Error[]).filter(e => e.errorMessage !== undefined).length > 0;
+type AreErrorsTypeGuard<T> = (validatedT: Validated<T>) => validatedT is Invalid[];
+export const AreErrors: AreErrorsTypeGuard<any> = (validatedT): validatedT is Invalid[] => {
+  return (validatedT as Invalid[]).filter(e => e.errorMessage !== undefined).length > 0;
 };
 
 export const runValidations: ValidateAll<any> = (fns, input): Validated<any> => {
   const x = fns.map((fn) => fn(input));
 
-  let errors: Error[] = [];
+  let errors: Invalid[] = [];
   x.forEach(
-    (eos: ErrorOr<any>): void => {
+    (eos: InvalidOr<any>): void => {
       if (isError(eos)) errors.push(eos);
     }
   );
