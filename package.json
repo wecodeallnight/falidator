@@ -1,17 +1,26 @@
 {
   "name": "@codeallnight/falidator",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Validation helper for TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "typescript": "^3.5.3",
-    "webpack": "^4.39.2"
+    "typescript": "^3.5.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.0.2"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx jest",
     "build": "rm dist/* & npx tsc"
+  },
+  "babel": {
+    "presets": [
+      "stage-3",
+      "latest"
+    ]
   },
   "repository": {
     "type": "git",
