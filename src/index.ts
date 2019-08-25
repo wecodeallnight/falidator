@@ -21,7 +21,15 @@ export const AreErrors: AreErrorsTypeGuard<{}> = (validatedT): validatedT is Inv
 };
 
 export const runValidations: ValidateAll<{}> = (fns, input): Validated<{}> => {
-    const validateResults = fns.map((fn): InvalidOr<{}> => fn(input));
+    const validateResults = fns.map((fn): InvalidOr<{}> => {
+        let result;
+        try {
+            result = fn(input);
+        } catch (error) {
+            result = { errorMessage: error.message };
+        }
+        return result;
+    });    
 
     let errors: Invalid[] = [];
     validateResults.forEach(
