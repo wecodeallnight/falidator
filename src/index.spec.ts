@@ -1,4 +1,5 @@
-import { Validate, runValidations, AreErrors, InvalidOr } from './index';
+import { runValidations } from './index';
+import { Invalid, Validate, InvalidOr, AreInvalid } from './models';
 
 describe('runValidations', (): void => {
     interface Person { age: number }
@@ -17,7 +18,7 @@ describe('runValidations', (): void => {
         const result = runValidations([above18], jane);
       
         expect(result).toStrictEqual([{ errorMessage: 'Not above 18' }]);
-        expect(AreErrors(result)).toBe(true);
+        expect(AreInvalid(result)).toBe(true);
     });
 
     it('handles exception thrown by validation function as Invalid', (): void => {
@@ -26,6 +27,6 @@ describe('runValidations', (): void => {
         const john = { age: 24 };
         const result = runValidations([throwException], john);
 
-        expect(result).toStrictEqual([{ errorMessage: 'Something bad happened'}]);
+        expect(result).toStrictEqual([ new Invalid('Something bad happened')]);
     });
 });
