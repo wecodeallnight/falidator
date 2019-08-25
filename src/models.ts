@@ -3,7 +3,7 @@ export interface Invalid {
 }
 
 export const Invalid = class implements Invalid {
-    public errorMessage: string;    
+    public errorMessage: string;
     public constructor(message: string) {
         this.errorMessage = message;
     }

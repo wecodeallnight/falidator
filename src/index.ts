@@ -1,4 +1,4 @@
-import { Invalid, InvalidOr, ValidateAll, Validated, isInvalid } from './models';
+import { Invalid, InvalidOr, ValidateAll, Validated } from './models';
 
 export const runValidations: ValidateAll<{}> = (fns, input): Validated<{}> => {
     const validateResults = fns.map((fn): InvalidOr<{}> => {
@@ -9,7 +9,7 @@ export const runValidations: ValidateAll<{}> = (fns, input): Validated<{}> => {
             result = new Invalid(error.message);
         }
         return result;
-    });    
+    });
 
     let errors: Invalid[] = [];
     validateResults.forEach(
