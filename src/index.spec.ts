@@ -4,7 +4,7 @@ import { Invalid, Validate, InvalidOr, AreInvalid } from './models';
 describe('runValidations', (): void => {
     interface Person { age: number }
     const above18: Validate<Person> = (person): InvalidOr<Person> => 
-        person.age > 18 ? person : { errorMessage: 'Not above 18' };
+        person.age > 18 ? person : new Invalid('Not above 18');
   
     it('returns the original object when pass validation', (): void => {          
         const john = { age: 24 };
@@ -13,11 +13,11 @@ describe('runValidations', (): void => {
         expect(result).toBe(john);
     }); 
 
-    it('returns an array of Invalid when fails validation', (): void => {          
+    it('returns an array of Invalid when fails validation', (): void => {  
         const jane = { age: 18 };
         const result = runValidations([above18], jane);
       
-        expect(result).toStrictEqual([{ errorMessage: 'Not above 18' }]);
+        expect(result).toStrictEqual([ new Invalid('Not above 18') ]);
         expect(AreInvalid(result)).toBe(true);
     });
 

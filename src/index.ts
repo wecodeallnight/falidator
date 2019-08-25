@@ -14,7 +14,7 @@ export const runValidations: ValidateAll<{}> = (fns, input): Validated<{}> => {
     let errors: Invalid[] = [];
     validateResults.forEach(
         (eos: InvalidOr<{}>): void => {
-            if (isInvalid(eos)) errors.push(eos);
+            if (eos instanceof Invalid) errors.push(eos);
         }
     );
 
