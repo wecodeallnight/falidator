@@ -8,7 +8,7 @@ describe('runValidations', (): void => {
 
     it('returns the original object when pass validation', (): void => {
         const john = { age: 24 };
-        const result = runValidations([above18], john);
+        const result = runValidations([above18], john); // the type parameter is inferred
 
         expect(result).toBe(john);
     });

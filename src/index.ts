@@ -1,6 +1,6 @@
 import { Invalid, InvalidOr, ValidateAll, Validated } from './models';
 
-export const runValidations: ValidateAll<{}> = (fns, input): Validated<{}> => {
+export const runValidations: ValidateAll = <T>(fns, input): Validated<T> => {
     const validateResults = fns.map((fn): InvalidOr<{}> => {
         let result;
         try {

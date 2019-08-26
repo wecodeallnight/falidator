@@ -12,7 +12,7 @@ export const Invalid = class implements Invalid {
 export type InvalidOr<T> = Invalid | T;
 export type Validate<T> = (t: T) => InvalidOr<T>;
 export type Validated<T> = Invalid[] | T;
-export type ValidateAll<T> = (fns: Validate<T>[], t: T) => Validated<T>;
+export type ValidateAll = <T>(fns: Validate<T>[], t: T) => Validated<T>;
 
 type IsInvalidTypeGuard<T> = (errorOrT: InvalidOr<T>) => errorOrT is Invalid;
 // What is {} here? It's an  empty binding pattern
