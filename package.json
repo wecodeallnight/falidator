@@ -1,6 +1,6 @@
 {
   "name": "@codeallnight/falidator",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Validation helper for TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,7 +16,7 @@
   },
   "scripts": {
     "test": "npx jest",
-    "build": "rm dist/* & npx tsc",
+    "build": "npm run lint -- --fix & rm dist/* & npx tsc",
     "lint": "npx eslint \"src/**\""
   },
   "babel": {
