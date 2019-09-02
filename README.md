@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/wecodeallnight/falidator.svg?branch=master)](https://travis-ci.com/wecodeallnight/falidator)
+
 # Falidator
 
 Make running validations against a JavaScript value fun again, because:
@@ -6,7 +8,9 @@ Make running validations against a JavaScript value fun again, because:
 - Any exception thrown by validation function, is quickly handled as `Invalid`
 - Typed with typescript
 
-JavaScript sample
+
+### JavaScript sample
+
 ```js
 const above18 = (person) => 
     person.age > 18 ? person : { errorMessage: "not above 18" };
@@ -18,7 +22,8 @@ const jane = { age: 18 }
 falidator.runValidations([above18], jane) // returns [{ errorMessage: "not above 18" }]
 ```
 
-TypeScript sample - synchronous
+
+### TypeScript sample - synchronous
 
 ```js
 interface Person { age: number; };
@@ -33,7 +38,9 @@ const jane = { age: 18 };
 runValidations([above18], jane); // returns [{ errorMessage: "not above 18" }]
 ```
 
-Type Script sample - asynchronous
+
+### Type Script sample - asynchronous
+
 ```js
 const isAllowed = async (person: Person): Promise<InvalidOr<Person>> => {
     const allowed = (person.name === 'Banned') ? new Invalid("Must not be in the banned list") : person;
