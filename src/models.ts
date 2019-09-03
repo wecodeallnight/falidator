@@ -11,7 +11,9 @@ export const Invalid = class implements Invalid {
 
 export type InvalidOr<T> = Invalid | T;
 export type Validate<T> = (t: T) => InvalidOr<T>;
-export type Validated<T> = Invalid[] | T;
+
+export type NonEmptyArray<T> = [T, ...T[]];
+export type Validated<T> = NonEmptyArray<Invalid> | T;
 export type ValidateAll = <T>(fns: Validate<T>[], t: T) => Validated<T>;
 
 type IsInvalidTypeGuard<T> = (errorOrT: InvalidOr<T>) => errorOrT is Invalid;
@@ -22,7 +24,7 @@ export const isInvalid: IsInvalidTypeGuard<{}> = (errorOrT): errorOrT is Invalid
     return (errorOrT as Invalid).errorMessage !== undefined;
 };
 
-type AreInvalidTypeGuard<T> = (validatedT: Validated<T>) => validatedT is Invalid[];
-export const AreInvalid: AreInvalidTypeGuard<{}> = (validatedT): validatedT is Invalid[] => {
+type AreInvalidTypeGuard<T> = (validatedT: Validated<T>) => validatedT is NonEmptyArray<Invalid>;
+export const AreInvalid: AreInvalidTypeGuard<{}> = (validatedT): validatedT is NonEmptyArray<Invalid> => {
     return (validatedT as Invalid[]).filter((e): boolean => e.errorMessage !== undefined).length > 0;
 };
