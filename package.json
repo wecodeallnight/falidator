@@ -18,21 +18,15 @@
     "test": "npx jest",
     "build": "npm run lint -- --fix & rm dist/* & npx tsc",
     "lint": "npx eslint \"src/**\""
-  },
-  "babel": {
-    "presets": [
-      "stage-3",
-      "latest"
-    ]
-  },
+  },  
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/djoepramono/falidator.git"
+    "url": "git+https://github.com/wecodeallnight/falidator.git"
   },
   "author": "Djoe Pramono",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/djoepramono/falidator/issues"
+    "url": "https://github.com/wecodeallnight/falidator/issues"
   },
-  "homepage": "https://github.com/djoepramono/falidator#readme"
+  "homepage": "https://github.com/wecodeallnight/falidator#readme"
 }
