@@ -1,6 +1,6 @@
 {
   "name": "@codeallnight/falidator",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Validation helper for TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,7 +18,7 @@
     "test": "npx jest",
     "build": "npm run lint -- --fix & rm dist/* & npx tsc",
     "lint": "npx eslint \"src/**\""
-  },  
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wecodeallnight/falidator.git"
