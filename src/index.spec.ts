@@ -1,5 +1,6 @@
 import { runValidations } from './index';
-import { Invalid, Validate, InvalidOr, AreInvalid } from './models';
+import { Invalid, Validate, InvalidOr } from './models';
+import { areInvalid } from './typeGuards';
 
 describe('runValidations', (): void => {
     interface Person { age: number }
@@ -18,7 +19,7 @@ describe('runValidations', (): void => {
         const result = runValidations([above18], jane);
 
         expect(result).toStrictEqual([ new Invalid('Not above 18') ]);
-        expect(AreInvalid(result)).toBe(true);
+        expect(areInvalid(result)).toBe(true);
     });
 
     it('handles exception thrown by validation function as Invalid', (): void => {
