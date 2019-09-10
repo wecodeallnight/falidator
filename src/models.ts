@@ -10,8 +10,5 @@ export const Invalid = class implements Invalid {
 };
 
 export type InvalidOr<T> = Invalid | T;
-export type Validate<T> = (t: T) => InvalidOr<T>;
-
-export type NonEmptyArray<T> = [T, ...T[]];
 export type Validated<T> = NonEmptyArray<Invalid> | T;
-export type ValidateAll = <T>(fns: Validate<T>[], t: T) => Validated<T>;
+export type NonEmptyArray<T> = [T, ...T[]];

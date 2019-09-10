@@ -1,5 +1,5 @@
-import { runValidations } from './index';
-import { Invalid, Validate, InvalidOr } from './models';
+import { Validate, runValidations } from './syncRun';
+import { Invalid, InvalidOr } from './models';
 import { areInvalid } from './typeGuards';
 
 describe('runValidations', (): void => {

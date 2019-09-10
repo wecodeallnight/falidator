@@ -1,25 +1,4 @@
-import { Invalid, InvalidOr, ValidateAll, Validated } from './models';
-
-export const runValidations: ValidateAll = <T>(fns, input): Validated<T> => {
-    const validateResults = fns.map((fn): InvalidOr<{}> => {
-        let result;
-        try {
-            result = fn(input);
-        } catch (error) {
-            result = new Invalid(error.message);
-        }
-        return result;
-    });
-
-    let errors: Invalid[] = [];
-    validateResults.forEach(
-        (eos: InvalidOr<{}>): void => {
-            if (eos instanceof Invalid) errors.push(eos);
-        }
-    );
-
-    return errors.length > 0 ? errors : input;
-};
+import { Invalid, InvalidOr, Validated } from './models';
 
 export type AsyncValidate<T> = (t: T) => Promise<InvalidOr<T>>;
 export type AsyncValidateAll = <T>(fns: AsyncValidate<T>[], t: T) => Promise<Validated<T>>;
