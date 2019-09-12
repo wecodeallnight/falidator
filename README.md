@@ -6,6 +6,7 @@ Make running validations against a JavaScript value fun again, because:
 - Run multiple validations at the same time and collate the result
 - No `if` and no dependencies to run
 - Any exception thrown by validation function, is quickly handled as `Invalid`
+- Similarly for multiple async validations, any rejection as accumulated as `Invalid`
 - Typed with typescript
 
 
