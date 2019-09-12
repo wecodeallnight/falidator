@@ -22,12 +22,15 @@ describe('runAsyncValidations', (): void => {
         run.then((result): boolean => expect(areInvalid(result)).toBe(true));
     });
 
-    it('handles rejected Promise by validation function as Invalid', (): void => {
+    it('handles rejected Promises by validation function as Invalid', (): void => {
         const rejectWithPromise = (): Promise<InvalidOr<Person>> => Promise.reject('Rejected');
+        const anotherRejectedPromise = (): Promise<InvalidOr<Person>> => Promise.reject('Another rejection');
 
         const john = { age: 24 };
-        const run = runAsyncValidations([rejectWithPromise], john);
+        const run = runAsyncValidations([rejectWithPromise, anotherRejectedPromise], john);
 
-        run.then((result): Validated<Person> => expect(result).toStrictEqual([ new Invalid('Rejected')]));
+        run.then((result): Validated<Person> => expect(result).toStrictEqual(
+            [ new Invalid('Rejected'), new Invalid('Another rejection') ]
+        ));
     });
 });
