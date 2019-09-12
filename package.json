@@ -4,6 +4,11 @@
   "description": "Validation helper for TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "keywords": [
+    "validation",
+    "typescript",
+    "async"
+  ],
   "dependencies": {},
   "devDependencies": {
     "@types/jest": "^24.0.18",
