@@ -1,16 +1,31 @@
 import { Invalid } from './models';
-import { isInvalid, areInvalid } from './typeGuards';
+import { isInvalid, areInvalid, isStrictInvalid } from './typeGuards';
 
 describe('isInvalid', (): void => {
     it('returns true for object created from Invalid class', (): void => {
         const myBad = new Invalid('Oops');
         expect(isInvalid(myBad)).toBe(true);
+        expect(isStrictInvalid(myBad)).toBe(true);
+
     });
 
     it('returns true for object with data structure matching Invalid class', (): void => {
         const myBad = { errorMessage: 'Oops'};
         expect(isInvalid(myBad)).toBe(true);
-        expect((myBad instanceof Invalid)).toBe(false);
+        expect(isStrictInvalid(myBad)).toBe(false);
+    });
+});
+
+describe('isStrictInvalid', (): void => {
+    it('returns true for object created from Invalid class', (): void => {
+        const myBad = new Invalid('Oops');
+        expect(isStrictInvalid(myBad)).toBe(true);
+
+    });
+
+    it('returns false for object with data structure matching Invalid class', (): void => {
+        const myBad = { errorMessage: 'Oops'};
+        expect(isStrictInvalid(myBad)).toBe(false);
     });
 });
 

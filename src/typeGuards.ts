@@ -8,6 +8,10 @@ export const isInvalid: IsInvalidTypeGuard<{}> = (errorOrT): errorOrT is Invalid
     return (errorOrT as Invalid).errorMessage !== undefined;
 };
 
+export const isStrictInvalid: IsInvalidTypeGuard<{}> = (errorOrT): errorOrT is Invalid => {
+    return (errorOrT instanceof Invalid);
+};
+
 type AreInvalidTypeGuard<T> = (validatedT: Validated<T>) => validatedT is NonEmptyArray<Invalid>;
 export const areInvalid: AreInvalidTypeGuard<{}> = (validatedT): validatedT is NonEmptyArray<Invalid> => {
     return (validatedT as Invalid[]).filter((e): boolean => e.errorMessage !== undefined).length > 0;
