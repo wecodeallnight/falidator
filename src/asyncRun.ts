@@ -1,4 +1,5 @@
 import { Invalid, InvalidOr, Validated } from './models';
+import { isStrictInvalid } from './typeGuards';
 
 export type AsyncValidate<T> = (t: T) => Promise<InvalidOr<T>>;
 export type AsyncValidateAll = <T>(fns: AsyncValidate<T>[], t: T) => Promise<Validated<T>>;
@@ -27,22 +28,17 @@ export const runAsyncValidations: AsyncValidateAll = async <T>(fns, input): Prom
 
     // Promise.all wait for all promise to resolve OR return the first rejected promise.
     // Which is not what we want, we want to collect all errors first
-    // This is why we need to compose the promises with catch
-    const validateResults: ArrayOfInvalidOr | Invalid = await Promise.all<ArrayOfInvalidOr>(wrappedPromises)
-        .catch((e): Invalid => new Invalid(e.message));
+    // This is why we need to compose the promises with catch above
+
+    // We might still need `catch` here to avoid Unhandled Promise rejection warning
+    const validateResults: ArrayOfInvalidOr = await Promise.all<ArrayOfInvalidOr>(wrappedPromises);
 
     let errors: Invalid[] = [];
 
-    if (validateResults instanceof Invalid) {
-        console.log('Something went wrong while waiting for all async validations');
-    // Unfortunately a simple else won't do
-    // TS is unable to determine the type
-    } else if (Array.isArray(validateResults)) {
-        validateResults.forEach(
-            (eos: Promise<InvalidOr<{}>>): void => {
-                if (eos instanceof Invalid) errors.push(eos);
-            }
-        );
-        return errors.length > 0 ? errors : input;
-    }
+    validateResults.forEach(
+        (eos: Promise<InvalidOr<{}>>): void => {
+            if (isStrictInvalid(eos)) errors.push(eos);
+        }
+    );
+    return errors.length > 0 ? errors : input;
 };

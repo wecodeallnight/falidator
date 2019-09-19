@@ -1,4 +1,5 @@
 import { Invalid, InvalidOr, Validated } from './models';
+import { isStrictInvalid } from './typeGuards';
 
 export type Validate<T> = (t: T) => InvalidOr<T>;
 export type ValidateAll = <T>(fns: Validate<T>[], t: T) => Validated<T>;
@@ -17,7 +18,7 @@ export const runValidations: ValidateAll = <T>(fns, input): Validated<T> => {
     let errors: Invalid[] = [];
     validateResults.forEach(
         (eos: InvalidOr<{}>): void => {
-            if (eos instanceof Invalid) errors.push(eos);
+            if (isStrictInvalid(eos)) errors.push(eos);
         }
     );
 
