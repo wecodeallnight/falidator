@@ -15,12 +15,12 @@ export const runValidations: ValidateAll = <T>(fns, input): Validated<T> => {
         return result;
     });
 
-    let errors: Invalid[] = [];
-    validateResults.forEach(
-        (eos: InvalidOr<{}>): void => {
-            if (isStrictInvalid(eos)) errors.push(eos);
-        }
-    );
+    const accumulateErrors = (accumulator: Invalid[], current: InvalidOr<{}>): Invalid[] => {
+        if (isStrictInvalid(current)) accumulator.push(current);
+        return accumulator;
+    };
+
+    const errors: Invalid[] = validateResults.reduce(accumulateErrors, []);
 
     return errors.length > 0 ? errors : input;
 };

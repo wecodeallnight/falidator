@@ -30,4 +30,13 @@ describe('runValidations', (): void => {
 
         expect(result).toStrictEqual([ new Invalid('Something bad happened')]);
     });
+
+    it('handles a mix of succesful validation and failed validation', (): void => {
+        const throwException = (): InvalidOr<Person> => { throw new Error('This one failed'); };
+
+        const john = { age: 24 };
+        const result = runValidations([above18, throwException], john);
+
+        expect(result).toStrictEqual([ new Invalid('This one failed')]);
+    });
 });
