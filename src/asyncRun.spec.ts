@@ -22,9 +22,9 @@ describe('runAsyncValidations', (): void => {
         run.then((result): boolean => expect(areInvalid(result)).toBe(true));
     });
 
-    it('handles rejected Promises by validation function as Invalid', (): void => {
-        const rejectWithPromise = (): Promise<InvalidOr<Person>> => Promise.reject('Rejected');
-        const anotherRejectedPromise = (): Promise<InvalidOr<Person>> => Promise.reject('Another rejection');
+    it('handles rejected Promises thrown by validation function as Invalid', (): void => {
+        const rejectWithPromise = async (): Promise<InvalidOr<Person>> => Promise.reject('Rejected');
+        const anotherRejectedPromise = async (): Promise<InvalidOr<Person>> => Promise.reject('Another rejection');
 
         const john = { age: 24 };
         const run = runAsyncValidations([rejectWithPromise, anotherRejectedPromise], john);
@@ -32,5 +32,20 @@ describe('runAsyncValidations', (): void => {
         run.then((result): Validated<Person> => expect(result).toStrictEqual(
             [ new Invalid('Rejected'), new Invalid('Another rejection') ]
         ));
+    });
+
+    it('handles Errors thrown by validation function as Invalid', (): void => {
+        const throwError = async (): Promise<InvalidOr<Person>> => { throw new Error('Errored'); };
+        const throwAnotherError = async (): Promise<InvalidOr<Person>> => { throw new Error('Another error'); };
+
+        const john = { age: 24 };
+
+        const run = runAsyncValidations([throwError, throwAnotherError], john);
+
+        run.then((result): Validated<Person> => expect(result).toStrictEqual(
+            [ new Invalid('Errored'), new Invalid('Another error') ]
+        )).catch(console.error);
+        // We need a catch here, because in the event of failed matcher, it will throw an Error
+        // which needs to be catched. Otherwise there'll be a warning on Unhandled promise rejection
     });
 });

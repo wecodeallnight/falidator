@@ -29,16 +29,13 @@ export const runAsyncValidations: AsyncValidateAll = async <T>(fns, input): Prom
     // Promise.all wait for all promise to resolve OR return the first rejected promise.
     // Which is not what we want, we want to collect all errors first
     // This is why we need to compose the promises with catch above
-
-    // We might still need `catch` here to avoid Unhandled Promise rejection warning
     const validateResults: ArrayOfInvalidOr = await Promise.all<ArrayOfInvalidOr>(wrappedPromises);
 
-    let errors: Invalid[] = [];
+    const accumulateErrors = (accumulator: Invalid[], current: InvalidOr<{}>): Invalid[] => {
+        if (isStrictInvalid(current)) accumulator.push(current);
+        return accumulator;
+    };
 
-    validateResults.forEach(
-        (eos: Promise<InvalidOr<{}>>): void => {
-            if (isStrictInvalid(eos)) errors.push(eos);
-        }
-    );
+    const errors: Invalid[] = validateResults.reduce<Invalid[]>(accumulateErrors, []);
     return errors.length > 0 ? errors : input;
 };
