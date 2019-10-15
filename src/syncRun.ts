@@ -1,11 +1,11 @@
 import { Invalid, InvalidOr, Validated } from './models';
-import { isStrictInvalid } from './typeGuards';
+import { isStrictInvalid, areInvalid } from './typeGuards';
 
 export type Validate<T> = (t: T) => InvalidOr<T>;
 export type ValidateAll = <T>(fns: Validate<T>[], t: T) => Validated<T>;
 
 export const runValidations: ValidateAll = <T>(fns, input): Validated<T> => {
-    const validateResults = fns.map((fn): InvalidOr<{}> => {
+    const validateResults: InvalidOr<T>[] = fns.map((fn): InvalidOr<T> => {
         let result;
         try {
             result = fn(input);
@@ -15,12 +15,12 @@ export const runValidations: ValidateAll = <T>(fns, input): Validated<T> => {
         return result;
     });
 
-    const accumulateErrors = (accumulator: Invalid[], current: InvalidOr<{}>): Invalid[] => {
+    const accumulateErrors = (accumulator: Invalid[], current: InvalidOr<T>): Invalid[] => {
         if (isStrictInvalid(current)) accumulator.push(current);
         return accumulator;
     };
 
     const errors: Invalid[] = validateResults.reduce(accumulateErrors, []);
 
-    return errors.length > 0 ? errors : input;
+    return areInvalid(errors) ? errors : input;
 };
