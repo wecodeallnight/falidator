@@ -4,6 +4,13 @@ import { isStrictInvalid, areInvalid } from './typeGuards';
 export type AsyncValidate<T> = (t: T) => Promise<InvalidOr<T>>;
 export type AsyncValidateAll = <T>(fns: AsyncValidate<T>[], t: T) => Promise<Validated<T>>;
 
+const turnCatchedIntoInvalid = (catchedError): Invalid => {
+    let message = `catched error ${catchedError}`;
+    if (catchedError.message !== undefined) message = catchedError.message;
+    if (typeof catchedError == 'string') message = catchedError;
+    return new Invalid(message);
+};
+
 export const runAsyncValidations: AsyncValidateAll = async <T>(asyncFunctions: AsyncValidate<T>[], input: T): Promise<Validated<T>> => {
     const eventualResults: Promise<InvalidOr<T>>[] = asyncFunctions.map(
         (fn): Promise<InvalidOr<T>> => { return fn(input); }
@@ -16,11 +23,7 @@ export const runAsyncValidations: AsyncValidateAll = async <T>(asyncFunctions: A
                 .catch(
                     // You cannot type what's catched here
                     // Because it can be Error or anything thrown by Promise.reject
-                    (e): Invalid => {
-                        // But just in case it's Error, we should take the message to form the Invalid
-                        const invalidMessage = e.message ? e.message : e;
-                        return new Invalid(invalidMessage);
-                    }
+                    (e): Invalid => { return turnCatchedIntoInvalid(e); }
                 )
         );
 
@@ -34,7 +37,6 @@ export const runAsyncValidations: AsyncValidateAll = async <T>(asyncFunctions: A
         return accumulator;
     };
 
-    //the type got swapped
     const errors: Invalid[] = validateResults.reduce<Invalid[]>(accumulateErrors, []);
     return areInvalid(errors) ? errors : input;
 };
