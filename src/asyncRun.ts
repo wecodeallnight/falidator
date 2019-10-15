@@ -1,10 +1,10 @@
 import { Invalid, InvalidOr, Validated } from './models';
-import { isStrictInvalid } from './typeGuards';
+import { isStrictInvalid, areInvalid } from './typeGuards';
 
 export type AsyncValidate<T> = (t: T) => Promise<InvalidOr<T>>;
-// export type AsyncValidateAll = <T>(fns: AsyncValidate<T>[], t: T) => Promise<Validated<T>>;
+export type AsyncValidateAll = <T>(fns: AsyncValidate<T>[], t: T) => Promise<Validated<T>>;
 
-export const runAsyncValidations = async <T>(asyncFunctions: AsyncValidate<T>[], input: T): Promise<T | Invalid[]> => {
+export const runAsyncValidations: AsyncValidateAll = async <T>(asyncFunctions: AsyncValidate<T>[], input: T): Promise<Validated<T>> => {
     const eventualResults: Promise<InvalidOr<T>>[] = asyncFunctions.map(
         (fn): Promise<InvalidOr<T>> => { return fn(input); }
     );
@@ -36,5 +36,5 @@ export const runAsyncValidations = async <T>(asyncFunctions: AsyncValidate<T>[],
 
     //the type got swapped
     const errors: Invalid[] = validateResults.reduce<Invalid[]>(accumulateErrors, []);
-    return errors.length > 0 ? errors : input;
+    return areInvalid(errors) ? errors : input;
 };
