@@ -21,7 +21,7 @@
   },
   "scripts": {
     "test": "npx jest",
-    "build": "npm run lint -- --fix & rm dist/* & npx tsc",
+    "build": "npm run lint -- --fix & rm dist/* & npx tsc -d",
     "lint": "npx eslint \"src/**\"",
     "publish-to-npmjs": "npm run build & npm publish"
   },
