@@ -6,12 +6,24 @@ node_js:
 before_deploy:
   - ./scripts/get-npm-token-from-env
 
-deploy:
-  provider: script
-  script: "npm test"
-  skip_cleanup: true
-  on:
-    tags: true
+jobs:
+  include:
+    - stage: test
+      script: "npm test"    
+    - stage: deploy
+      script: "echo deploying"
+
+stages:
+  - test
+  - deploy
+    if: branch = master
+
+# deploy:
+#   provider: script
+#   script: "npm test"
+#   skip_cleanup: true
+#   on:
+#     tags: true
 
 notifications:
   email:
