@@ -1,0 +1,41 @@
+version: 2
+
+defaults: &defaults
+  working_directory: ~/repo
+  environment:
+    CACHE_VERSION: 1
+  docker:
+    - image: circleci/node:12.13
+
+jobs:
+  test-and-lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - cache-v1-{{ checksum "package.json" }}
+            - cache-v1- # fallback match
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: cache-v1-{{ checksum "package.json" }}
+      - run: npm test
+
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+      - test-and-lint:
+          filters:
+            tags:
+              only: /^v.*/
+      # - deploy:
+      #     requires:
+      #       - test
+      #     filters:
+      #       tags:
+      #         only: /^v.*/
+      #       branches:
+      #         ignore: /.*/
