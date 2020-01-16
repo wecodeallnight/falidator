@@ -2,8 +2,6 @@ version: 2
 
 defaults: &defaults
   working_directory: ~/repo
-  environment:
-    CACHE_VERSION: 1
   docker:
     - image: circleci/node:12.13
 
@@ -16,24 +14,60 @@ jobs:
           keys:
             - cache-v1-{{ checksum "package.json" }}
             - cache-v1- # fallback match
-      - run: npm install
+      - run:
+          name: Install dependencies
+          command: npm install
       - save_cache:
           paths:
             - node_modules
           key: cache-v1-{{ checksum "package.json" }}
-      - run: npm test
+      - run:
+          name: Test and lint
+          command: npm run test & npm run lint      
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Build package
+          command: npm run build
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+  publish:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+      # - run:
+      #     name: Publish package
+      #     command: npm run publish-to-npmjs
 
 workflows:
   version: 2
-  test-deploy:
+  test:
     jobs:
-      - test-and-lint:
-          filters:
-            tags:
-              only: /^v.*/
-      # - deploy:
-      #     requires:
-      #       - test
+      - test-and-lint
+      - build:
+         filters:
+            branches:
+              only: master
+         requires:
+           - test-and-lint
+      - hold:
+          type: approval
+          requires:
+            - build
+      - publish:
+          requires:
+            - hold
       #     filters:
       #       tags:
       #         only: /^v.*/
