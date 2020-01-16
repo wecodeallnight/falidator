@@ -1,5 +1,5 @@
 import { AsyncValidate, runAsyncValidations } from './asyncRun';
-import { Invalid, InvalidOr, Validated } from './models';
+import { Invalid, InvalidOr } from './models';
 import { areInvalid } from './typeGuards';
 
 describe('runAsyncValidations', (): void => {
@@ -11,15 +11,15 @@ describe('runAsyncValidations', (): void => {
         const john = { age: 24 };
         const run = runAsyncValidations([above18], john); // the type parameter is inferred
 
-        run.then((result): Validated<Person> => expect(result).toStrictEqual(john));
+        run.then((result): void => expect(result).toStrictEqual(john));
     });
 
     it('returns an array of Invalid when fails validation', (): void => {
         const jane = { age: 18 };
         const run = runAsyncValidations([above18], jane);
 
-        run.then((result): Validated<Person> => expect(result).toStrictEqual([ new Invalid('Not above 18') ]));
-        run.then((result): boolean => expect(areInvalid(result)).toBe(true));
+        run.then((result): void => expect(result).toStrictEqual([ new Invalid('Not above 18') ]));
+        run.then((result): void => expect(areInvalid(result)).toBe(true));
     });
 
     it('handles rejected Promises thrown by validation function as Invalid', (): void => {
@@ -29,7 +29,7 @@ describe('runAsyncValidations', (): void => {
         const john = { age: 24 };
         const run = runAsyncValidations([rejectWithPromise, anotherRejectedPromise], john);
 
-        run.then((result): Validated<Person> => expect(result).toStrictEqual(
+        run.then((result): void => expect(result).toStrictEqual(
             [ new Invalid('Rejected'), new Invalid('Another rejection') ]
         ));
     });
@@ -42,7 +42,7 @@ describe('runAsyncValidations', (): void => {
 
         const run = runAsyncValidations([throwError, throwAnotherError], john);
 
-        run.then((result): Validated<Person> => expect(result).toStrictEqual(
+        run.then((result): void => expect(result).toStrictEqual(
             [ new Invalid('Errored'), new Invalid('Another error') ]
         )).catch(console.error);
         // We need a catch here, because in the event of failed matcher, it will throw an Error
