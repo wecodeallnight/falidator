@@ -12,17 +12,17 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - cache-v1-{{ checksum "package.json" }}
-            - cache-v1- # fallback match
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies- # fallback match
       - run:
           name: Install dependencies
           command: npm install
       - save_cache:
           paths:
             - node_modules
-          key: cache-v1-{{ checksum "package.json" }}
+          key: v1-dependencies-{{ checksum "package.json" }}
       - run: npm run test
-      - run: npm run lint         
+      - run: npm run lint
       - persist_to_workspace:
           root: ~/repo
           paths: .
@@ -55,11 +55,11 @@ workflows:
     jobs:
       - test-and-lint
       - build:
-         filters:
+          filters:
             branches:
               only: master
-         requires:
-           - test-and-lint
+          requires:
+            - test-and-lint
       - hold:
           type: approval
           requires:
