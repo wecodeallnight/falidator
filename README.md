@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/wecodeallnight/falidator.svg?branch=master)](https://travis-ci.com/wecodeallnight/falidator)
+[![CircleCI](https://circleci.com/gh/wecodeallnight/falidator.svg?style=svg)](https://circleci.com/gh/wecodeallnight/falidator)
 
 # Falidator
 
