@@ -55,9 +55,9 @@ workflows:
     jobs:
       - test-and-lint
       - build:
-          filters:
-            branches:
-              only: master
+          filters:  # required since `publish` has tag filters AND requires `build`
+            tags:
+              only: /.*/
           requires:
             - test-and-lint
       - publish:          
