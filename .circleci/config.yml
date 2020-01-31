@@ -51,7 +51,7 @@ jobs:
 
 workflows:
   version: 2
-  test:
+  generic:
     jobs:
       - test-and-lint
       - build:
@@ -60,10 +60,6 @@ workflows:
               only: master
           requires:
             - test-and-lint
-      - hold:
-          type: approval
-          requires:
-            - build
       - publish:
           requires:
             - hold
