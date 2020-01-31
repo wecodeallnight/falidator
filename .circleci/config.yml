@@ -57,7 +57,9 @@ workflows:
       - build:
           filters:  # required since `publish` has tag filters AND requires `build`
             tags:
-              only: /.*/
+              only: /^v.*/
+            branches:
+              ignore: /.*/
           requires:
             - test-and-lint
       - publish:          
