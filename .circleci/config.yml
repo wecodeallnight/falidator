@@ -53,12 +53,15 @@ workflows:
   version: 2
   generic:
     jobs:
-      - test-and-lint
-      - build:
-          filters:  # required since `publish` has tag filters AND requires `build`
-            tags:
+      - test-and-lint: # implicitly all jobs always run on branches, unless filtered.
+          filters:  
+            tags: # required since `build` has tag filters AND requires `test-and-lint`.
               only: /^v.*/
-            branches:
+      - build:
+          filters:  
+            tags: # required since `publish` has tag filters AND requires `build`
+              only: /^v.*/
+            branches: # required since we don't want to build on branches, just tags
               ignore: /.*/
           requires:
             - test-and-lint
