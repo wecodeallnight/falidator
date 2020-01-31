@@ -60,9 +60,7 @@ workflows:
               only: master
           requires:
             - test-and-lint
-      - publish:
-          requires:
-            - hold
+      - publish:          
           filters:
             tags:
               only: /^v.*/
