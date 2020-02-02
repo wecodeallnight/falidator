@@ -63,8 +63,14 @@ workflows:
             branches:
               ignore: /.*/
       - build:
+          filters:
+            tags:
+              only: /^v.*/
           requires:
             - test_and_lint
       - publish:
+          filters:
+            tags:
+              only: /^v.*/
           requires:
             - build
