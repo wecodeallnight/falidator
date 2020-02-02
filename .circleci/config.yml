@@ -6,7 +6,7 @@ defaults: &defaults
     - image: circleci/node:12.13
 
 jobs:
-  test-and-lint:
+  test_and_lint:
     <<: *defaults
     steps:
       - checkout
@@ -51,25 +51,20 @@ jobs:
 
 workflows:
   version: 2
-  generic:
+  on_branch:
     jobs:
-      - test-and-lint: # implicitly all jobs always run on branches, unless filtered.
-          filters:  
-            tags: # required since `build` has tag filters AND requires `test-and-lint`.
-              only: /^v.*/
-      - build:
-          filters:  
-            tags: # required since `publish` has tag filters AND requires `build`
-              only: /^v.*/
-            branches: # required since we don't want to build on branches, just tags
-              ignore: /.*/
-          requires:
-            - test-and-lint
-      - publish:
+      - test_and_lint
+  on_tags:
+    jobs:
+      - test_and_lint:
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
+      - build:
+          requires:
+            - test_and_lint
+      - publish:
           requires:
             - build
